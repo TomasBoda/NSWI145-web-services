@@ -1,0 +1,136 @@
+<definitions
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:tns="http://auth.main/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://schemas.xmlsoap.org/wsdl/"
+    name="AuthService"
+    targetNamespace="http://auth.main/"
+>
+    <types>
+        <xsd:schema>
+            <xs:schema
+                xmlns:tns="http://auth.main/"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                targetNamespace="http://auth.main/"
+            >
+                <xs:element name="user" type="tns:user" />
+                <xs:element name="session" type="tns:session" />
+                <xs:element name="response" type="tns:response" />
+
+                <xs:element name="signIn" type="tns:signIn" />
+                <xs:element name="signInResponse" type="tns:signInResponse" />
+
+                <xs:element name="getSession" type="tns:getSession" />
+                <xs:element name="getSessionResponse" type="tns:getSessionResponse" />
+
+                <xs:complexType name="user">
+                    <xs:sequence>
+                        <xs:element name="username" type="xs:string" minOccurs="0" />
+                    </xs:sequence>
+                </xs:complexType>
+
+                <xs:complexType name="session">
+                    <xs:sequence>
+                        <xs:element name="token" type="xs:string" minOccurs="0" />
+                        <xs:element name="user" type="tns:user" minOccurs="0" />
+                    </xs:sequence>
+                </xs:complexType>
+
+                <xs:complexType name="response">
+                    <xs:sequence>
+                        <xs:element name="data" type="xs:anyType" minOccurs="0" />
+                        <xs:element name="message" type="xs:string" minOccurs="0" />
+                        <xs:element name="status" type="xs:int" />
+                    </xs:sequence>
+                </xs:complexType>
+
+                <xs:complexType name="signIn">
+                    <xs:sequence>
+                        <xs:element name="arg0" type="xs:string" minOccurs="0" />
+                        <xs:element name="arg1" type="xs:string" minOccurs="0" />
+                    </xs:sequence>
+                </xs:complexType>
+
+                <xs:complexType name="signInResponse">
+                    <xs:sequence>
+                        <xs:element name="return" type="tns:response" minOccurs="0" />
+                    </xs:sequence>
+                </xs:complexType>
+
+                <xs:complexType name="getSession">
+                    <xs:sequence>
+                        <xs:element name="arg0" type="xs:string" minOccurs="0" />
+                    </xs:sequence>
+                </xs:complexType>
+
+                <xs:complexType name="getSessionResponse">
+                    <xs:sequence>
+                        <xs:element name="return" type="tns:response" minOccurs="0" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:schema>
+        </xsd:schema>
+    </types>
+
+    <message name="signIn">
+        <part name="parameters" element="tns:signIn" />
+    </message>
+
+    <message name="signInResponse">
+        <part name="parameters" element="tns:signInResponse" />
+    </message>
+
+    <message name="getSession">
+        <part name="parameters" element="tns:getSession" />
+    </message>
+
+    <message name="getSessionResponse">
+        <part name="parameters" element="tns:getSessionResponse" />
+    </message>
+
+    <portType name="AuthServicePortType">
+        <operation name="signIn">
+            <input message="tns:signIn" />
+            <output message="tns:signInResponse" />
+        </operation>
+        
+        <operation name="getSession">
+            <input message="tns:getSession" />
+            <output message="tns:getSessionResponse" />
+        </operation>
+    </portType>
+
+    <binding name="AuthServiceBinding" type="tns:AuthServicePortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+
+        <operation name="signIn">
+            <soap:operation soapAction="" />
+
+            <input>
+                <soap:body use="literal" />
+            </input>
+
+            <output>
+                <soap:body use="literal" />
+            </output>
+        </operation>
+
+        <operation name="getSession">
+            <soap:operation soapAction="" />
+
+            <input>
+                <soap:body use="literal" />
+            </input>
+
+            <output>
+                <soap:body use="literal" />
+            </output>
+        </operation>
+    </binding>
+
+    <service name="AuthService">
+        <port name="AuthServicePort" binding="tns:AuthServiceBinding">
+            <soap:address location="http://127.0.0.1:8000/auth" />
+        </port>
+    </service>
+</definitions>

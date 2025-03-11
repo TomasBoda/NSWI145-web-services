@@ -1,0 +1,136 @@
+<definitions
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:tns="http://bank.main/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://schemas.xmlsoap.org/wsdl/"
+    name="BankService"
+    targetNamespace="http://bank.main/"
+>
+    <types>
+        <xsd:schema>
+            <xs:schema
+                xmlns:tns="http://bank.main/"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                targetNamespace="http://bank.main/"
+            >
+                <xs:element name="user" type="tns:user" />
+                <xs:element name="session" type="tns:session" />
+                <xs:element name="response" type="tns:response" />
+                
+                <xs:element name="getBalance" type="tns:getBalance" />
+                <xs:element name="getBalanceResponse" type="tns:getBalanceResponse" />
+
+                <xs:element name="sendMoney" type="tns:sendMoney" />
+                <xs:element name="sendMoneyResponse" type="tns:sendMoneyResponse" />
+
+                <xs:complexType name="user">
+                    <xs:sequence>
+                        <xs:element name="username" type="xs:string" minOccurs="0" />
+                    </xs:sequence>
+                </xs:complexType>
+
+                <xs:complexType name="session">
+                    <xs:sequence>
+                        <xs:element name="token" type="xs:string" minOccurs="0" />
+                        <xs:element name="user" type="tns:user" minOccurs="0" />
+                    </xs:sequence>
+                </xs:complexType>
+
+                <xs:complexType name="response">
+                    <xs:sequence>
+                        <xs:element name="data" type="xs:anyType" minOccurs="0" />
+                        <xs:element name="message" type="xs:string" minOccurs="0" />
+                        <xs:element name="status" type="xs:int" />
+                    </xs:sequence>
+                </xs:complexType>
+
+                <xs:complexType name="getBalance">
+                    <xs:sequence>
+                        <xs:element name="token" type="xs:string" minOccurs="0" />
+                    </xs:sequence>
+                </xs:complexType>
+
+                <xs:complexType name="getBalanceResponse">
+                    <xs:sequence>
+                        <xs:element name="return" type="tns:response" minOccurs="0" />
+                    </xs:sequence>
+                </xs:complexType>
+
+                <xs:complexType name="sendMoney">
+                    <xs:sequence>
+                        <xs:element name="token" type="xs:string" minOccurs="0" />
+                        <xs:element name="amount" type="xs:double" minOccurs="0" />
+                    </xs:sequence>
+                </xs:complexType>
+
+                <xs:complexType name="sendMoneyResponse">
+                    <xs:sequence>
+                        <xs:element name="return" type="tns:response" minOccurs="0" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:schema>
+        </xsd:schema>
+    </types>
+
+    <message name="getBalance">
+        <part name="parameters" element="tns:getBalance" />
+    </message>
+
+    <message name="getBalanceResponse">
+        <part name="parameters" element="tns:getBalanceResponse" />
+    </message>
+
+    <message name="sendMoney">
+        <part name="parameters" element="tns:sendMoney" />
+    </message>
+
+    <message name="sendMoneyResponse">
+        <part name="parameters" element="tns:sendMoneyResponse" />
+    </message>
+
+    <portType name="BankServicePortType">
+        <operation name="getBalance">
+            <input message="tns:getBalance" />
+            <output message="tns:getBalanceResponse" />
+        </operation>
+
+        <operation name="sendMoney">
+            <input message="tns:sendMoney" />
+            <output message="tns:sendMoneyResponse" />
+        </operation>
+    </portType>
+
+    <binding name="BankServiceBinding" type="tns:BankServicePortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+
+        <operation name="getBalance">
+            <soap:operation soapAction="" />
+
+            <input>
+                <soap:body use="literal" />
+            </input>
+
+            <output>
+                <soap:body use="literal" />
+            </output>
+        </operation>
+
+        <operation name="sendMoney">
+            <soap:operation soapAction="" />
+
+            <input>
+                <soap:body use="literal" />
+            </input>
+
+            <output>
+                <soap:body use="literal" />
+            </output>
+        </operation>
+    </binding>
+
+    <service name="BankService">
+        <port name="BankServicePort" binding="tns:BankServiceBinding">
+            <soap:address location="http://127.0.0.1:8000/bank"/>
+        </port>
+    </service>
+</definitions>
