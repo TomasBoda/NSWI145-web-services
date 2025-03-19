@@ -12,8 +12,8 @@ public class Main {
 		AuthServiceImpl authService = new AuthServiceImpl();
 		BankServiceImpl bankService = new BankServiceImpl(authService);
 		
-		this.publish("Auth Service", "/auth", authService);
-		this.publish("Bank Service", "/bank", bankService);
+		this.publish("AuthService", "/auth", authService);
+		this.publish("BankService", "/bank", bankService);
 	}
 	
 	private void publish(String name, String url, Object implementator) {
