@@ -1,0 +1,33 @@
+<xs:schema xmlns:tns="http://main/" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="unqualified" targetNamespace="http://main/" version="1.0">
+
+  <xs:element name="getBalance" type="tns:getBalance"/>
+
+  <xs:element name="getBalanceResponse" type="tns:getBalanceResponse"/>
+
+  <xs:element name="sendMoney" type="tns:sendMoney"/>
+
+  <xs:element name="sendMoneyResponse" type="tns:sendMoneyResponse"/>
+
+  <xs:complexType name="getBalance">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="getBalanceResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:double"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="sendMoney">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:double"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="sendMoneyResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:double"/>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>

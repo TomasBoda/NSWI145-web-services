@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="BankServiceImplService" targetNamespace="http://main/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://main/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+    <schema xmlns="http://www.w3.org/2001/XMLSchema">
+  <import namespace="http://main/" schemaLocation="bankserviceimpl_schema1.xsd"/>
+</schema>
+  </wsdl:types>
+  <wsdl:message name="getBalanceResponse">
+    <wsdl:part name="parameters" element="tns:getBalanceResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="sendMoney">
+    <wsdl:part name="parameters" element="tns:sendMoney">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getBalance">
+    <wsdl:part name="parameters" element="tns:getBalance">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="sendMoneyResponse">
+    <wsdl:part name="parameters" element="tns:sendMoneyResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="BankService">
+    <wsdl:operation name="getBalance">
+      <wsdl:input name="getBalance" message="tns:getBalance">
+    </wsdl:input>
+      <wsdl:output name="getBalanceResponse" message="tns:getBalanceResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendMoney">
+      <wsdl:input name="sendMoney" message="tns:sendMoney">
+    </wsdl:input>
+      <wsdl:output name="sendMoneyResponse" message="tns:sendMoneyResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BankServiceImplServiceSoapBinding" type="tns:BankService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getBalance">
+      <soap:operation soapAction="urn:GetBalance" style="document"/>
+      <wsdl:input name="getBalance">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getBalanceResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendMoney">
+      <soap:operation soapAction="urn:SendMoney" style="document"/>
+      <wsdl:input name="sendMoney">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendMoneyResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="BankServiceImplService">
+    <wsdl:port name="BankServiceImplPort" binding="tns:BankServiceImplServiceSoapBinding">
+      <soap:address location="http://localhost:8080/05-cxf/services/BankServiceImplPort"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
