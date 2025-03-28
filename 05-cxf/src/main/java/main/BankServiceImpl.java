@@ -9,11 +9,6 @@ public class BankServiceImpl implements BankService {
 	public double getBalance() {		
 		return this.getAccountBalance();
 	}
-
-	@Override
-	public double sendMoney(Double amount) {
-		return this.getAccountBalance() - amount;
-	}
 	
 	private double getAccountBalance() {
 		return 2250.45;
