@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions
+    xmlns:tns="http://hw/Process/wsdl" 
+    xmlns:tnsxsd="http://hw/Process/xsd" 
+
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+    xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" 
+    xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" 
+
+	xmlns:bookstore="http://bookstore.main/"
+	xmlns:order="http://order.main/"
+
+    targetNamespace="http://hw/Process/wsdl"
+>
+    <wsdl:import location="bookstore.wsdl" namespace="http://bookstore.main/" />
+    <wsdl:import location="order.wsdl" namespace="http://order.main/" />
+
+    <wsdl:types>
+		<xsd:schema targetNamespace="http://hw/Process/xsd" >
+			<xsd:element name="processIn">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="bookTitle" type="xsd:string"/>
+					</xsd:sequence>		
+				</xsd:complexType>
+			</xsd:element>
+		
+			<xsd:element name="processOut" type="xsd:string"/>
+		</xsd:schema>
+	</wsdl:types>
+
+	<wsdl:message name="ProcessInputMessage">
+		<wsdl:part name="parameters" element="tnsxsd:processIn"/>
+	</wsdl:message>
+	
+	<wsdl:message name="ProcessOutputMessage">
+		<wsdl:part name="parameters" element="tnsxsd:processOut"/>
+	</wsdl:message>
+
+	<wsdl:portType name="ProcessPortType">
+		<wsdl:operation name="executeProcess">
+			<wsdl:input name="ProcessIn" message="tns:ProcessInputMessage"/>
+			<wsdl:output name="ProcessOut" message="tns:ProcessOutputMessage"/>
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<wsdl:portType name="SearchBookResponsePortType">
+		<wsdl:operation name="searchBookOperation">
+			<wsdl:input name="SearchBookIn" message="bookstore:searchBookResponse"/>
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<wsdl:portType name="GetBookPriceResponsePortType">
+		<wsdl:operation name="getBookPriceOperation">
+			<wsdl:input name="GetBookPriceIn" message="bookstore:getBookPriceResponse"/>
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<wsdl:portType name="PlaceOrderResponsePortType">
+		<wsdl:operation name="placeOrderOperation">
+			<wsdl:input name="PlaceOrderIn" message="order:placeOrderResponse"/>
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<wsdl:portType name="MakePaymentResponsePortType">
+		<wsdl:operation name="makePaymentOperation">
+			<wsdl:input name="MakePaymentIn" message="order:makePaymentResponse"/>
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<wsdl:portType name="SendConfirmationResponsePortType">
+		<wsdl:operation name="sendConfirmationOperation">
+			<wsdl:input name="SendConfirmationIn" message="order:sendConfirmationResponse"/>
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<!-- add more port types -->
+
+	<wsdl:binding name="CustomProcessSOAPBinding" type="tns:ProcessPortType">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+		<wsdl:operation name="executeProcess">
+			<soap:operation soapAction="urn:executeProcess" style="document"/>
+
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<wsdl:binding name="SearchBookSOAPBinding" type="tns:SearchBookResponsePortType">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="searchBookOperation">
+			<soap:operation soapAction="urn:searchBookResponseOperation" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<wsdl:binding name="GetBookPriceSOAPBinding" type="tns:GetBookPriceResponsePortType">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="getBookPriceOperation">
+			<soap:operation soapAction="urn:getBookPriceResponseOperation" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<wsdl:binding name="PlaceOrderSOAPBinding" type="tns:PlaceOrderResponsePortType">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="placeOrderOperation">
+			<soap:operation soapAction="urn:placeOrderResponseOperation" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<wsdl:binding name="MakePaymentSOAPBinding" type="tns:MakePaymentResponsePortType">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="makePaymentOperation">
+			<soap:operation soapAction="urn:makePaymentResponseOperation" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<wsdl:binding name="SendConfirmationSOAPBinding" type="tns:SendConfirmationResponsePortType">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="sendConfirmationOperation">
+			<soap:operation soapAction="urn:sendConfirmationResponseOperation" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<!-- add more bindings -->
+
+	<wsdl:service name="CustomProcessService">
+		<wsdl:port name="ProcessPort" binding="tns:CustomProcessSOAPBinding">
+			<soap:address location="http://localhost:8080/ode/processes/Process"/>
+		</wsdl:port>
+
+		<wsdl:port name="SearchBookPort" binding="tns:SearchBookSOAPBinding">
+			<soap:address location="http://localhost:8080/ode/processes/ProcessSearchBook"/>
+		</wsdl:port>
+
+		<wsdl:port name="GetBookPricePort" binding="tns:GetBookPriceSOAPBinding">
+			<soap:address location="http://localhost:8080/ode/processes/ProcessGetBookPrice"/>
+		</wsdl:port>
+
+		<wsdl:port name="PlaceOrderPort" binding="tns:PlaceOrderSOAPBinding">
+			<soap:address location="http://localhost:8080/ode/processes/ProcessPlaceOrder"/>
+		</wsdl:port>
+
+		<wsdl:port name="MakePaymentPort" binding="tns:MakePaymentSOAPBinding">
+			<soap:address location="http://localhost:8080/ode/processes/ProcessMakePayment"/>
+		</wsdl:port>
+
+		<wsdl:port name="SendConfirmationPort" binding="tns:SendConfirmationSOAPBinding">
+			<soap:address location="http://localhost:8080/ode/processes/SendConfirmationPayment"/>
+		</wsdl:port>
+
+		<!-- add more ports -->
+	</wsdl:service>
+
+	<plnk:partnerLinkType name="ProcessLinkType">
+		<plnk:role name="CustomProcessExecutorRole" portType="tns:ProcessPortType"/>
+	</plnk:partnerLinkType>
+
+	<plnk:partnerLinkType name="SearchBookLinkType">
+	  <plnk:role name="SearchBookRole" portType="bookstore:BookStoreServiceImpl" />
+	  <plnk:role name="SearchBookClientRole" portType="tns:SearchBookResponsePortType" />
+	</plnk:partnerLinkType>
+
+	<plnk:partnerLinkType name="GetBookPriceLinkType">
+	  <plnk:role name="GetBookPriceRole" portType="bookstore:BookStoreServiceImpl" />
+	  <plnk:role name="GetBookPriceClientRole" portType="tns:GetBookPriceResponsePortType" />
+	</plnk:partnerLinkType>
+
+	<plnk:partnerLinkType name="PlaceOrderLinkType">
+	  <plnk:role name="PlaceOrderRole" portType="order:OrderServiceImpl" />
+	  <plnk:role name="PlaceOrderClientRole" portType="tns:PlaceOrderResponsePortType" />
+	</plnk:partnerLinkType>
+
+	<plnk:partnerLinkType name="MakePaymentLinkType">
+	  <plnk:role name="MakePaymentRole" portType="order:OrderServiceImpl" />
+	  <plnk:role name="MakePaymentClientRole" portType="tns:MakePaymentResponsePortType" />
+	</plnk:partnerLinkType>
+
+	<plnk:partnerLinkType name="SendConfirmationLinkType">
+	  <plnk:role name="SendConfirmationRole" portType="order:OrderServiceImpl" />
+	  <plnk:role name="SendConfirmationClientRole" portType="tns:SendConfirmationResponsePortType" />
+	</plnk:partnerLinkType>
+</wsdl:definitions>

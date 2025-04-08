@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions
+    xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+    xmlns:wsp="http://www.w3.org/ns/ws-policy"
+    xmlns:wsp1_2="http://schemas.xmlsoap.org/ws/2004/09/policy"
+    xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:tns="http://order.main/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" 
+    xmlns="http://schemas.xmlsoap.org/wsdl/"
+    targetNamespace="http://order.main/"
+    name="OrderServiceImplService"
+>
+    <types>
+        <xs:schema
+            xmlns:tns="http://order.main/"
+            xmlns:xs="http://www.w3.org/2001/XMLSchema"
+            version="1.0"
+            targetNamespace="http://order.main/"
+        >
+            <xs:element name="makePayment" type="tns:makePayment"/>
+            <xs:element name="makePaymentResponse" type="tns:makePaymentResponse"/>
+            <xs:element name="placeOrder" type="tns:placeOrder"/>
+            <xs:element name="placeOrderResponse" type="tns:placeOrderResponse"/>
+            <xs:element name="sendConfirmation" type="tns:sendConfirmation"/>
+            <xs:element name="sendConfirmationResponse" type="tns:sendConfirmationResponse"/>
+            
+            <xs:complexType name="placeOrder">
+                <xs:sequence>
+                    <xs:element name="arg0" type="xs:string" minOccurs="0"/>
+                    <xs:element name="arg1" type="xs:string" minOccurs="0"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="placeOrderResponse">
+                <xs:sequence>
+                    <xs:element name="return" type="xs:string" minOccurs="0"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="makePayment">
+                <xs:sequence>
+                    <xs:element name="arg0" type="xs:string" minOccurs="0"/>
+                    <xs:element name="arg1" type="xs:double"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="makePaymentResponse">
+                <xs:sequence>
+                    <xs:element name="return" type="xs:string" minOccurs="0"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="sendConfirmation">
+                <xs:sequence>
+                    <xs:element name="arg0" type="xs:string" minOccurs="0"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="sendConfirmationResponse">
+                <xs:sequence>
+                    <xs:element name="return" type="xs:string" minOccurs="0"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+    </types>
+
+    <message name="makePayment">
+        <part name="parameters" element="tns:makePayment"/>
+    </message>
+
+    <message name="makePaymentResponse">
+        <part name="parameters" element="tns:makePaymentResponse"/>
+    </message>
+
+    <message name="placeOrder">
+        <part name="parameters" element="tns:placeOrder"/>
+    </message>
+
+    <message name="placeOrderResponse">
+        <part name="parameters" element="tns:placeOrderResponse"/>
+    </message>
+
+    <message name="sendConfirmation">
+        <part name="parameters" element="tns:sendConfirmation"/>
+    </message>
+
+    <message name="sendConfirmationResponse">
+        <part name="parameters" element="tns:sendConfirmationResponse"/>
+    </message>
+
+    <portType name="OrderServiceImpl">
+        <operation name="makePayment">
+            <input wsam:Action="http://order.main/OrderServiceImpl/makePaymentRequest" message="tns:makePayment"/>
+            <output wsam:Action="http://order.main/OrderServiceImpl/makePaymentResponse" message="tns:makePaymentResponse"/>
+        </operation>
+
+        <operation name="placeOrder">
+            <input wsam:Action="http://order.main/OrderServiceImpl/placeOrderRequest" message="tns:placeOrder"/>
+            <output wsam:Action="http://order.main/OrderServiceImpl/placeOrderResponse" message="tns:placeOrderResponse"/>
+        </operation>
+        
+        <operation name="sendConfirmation">
+            <input wsam:Action="http://order.main/OrderServiceImpl/sendConfirmationRequest" message="tns:sendConfirmation"/>
+            <output wsam:Action="http://order.main/OrderServiceImpl/sendConfirmationResponse" message="tns:sendConfirmationResponse"/>
+        </operation>
+    </portType>
+
+    <binding name="OrderServiceImplPortBinding" type="tns:OrderServiceImpl">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        
+        <operation name="makePayment">
+            <soap:operation soapAction=""/>
+
+            <input>
+                <soap:body use="literal"/>
+            </input>
+
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+
+        <operation name="placeOrder">
+            <soap:operation soapAction=""/>
+
+            <input>
+                <soap:body use="literal"/>
+            </input>
+
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+
+        <operation name="sendConfirmation">
+            <soap:operation soapAction=""/>
+
+            <input>
+                <soap:body use="literal"/>
+            </input>
+
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+
+    <service name="OrderServiceImplService">
+        <port name="OrderServiceImplPort" binding="tns:OrderServiceImplPortBinding">
+            <soap:address location="http://127.0.0.1:8000/order"/>
+        </port>
+    </service>
+</definitions>

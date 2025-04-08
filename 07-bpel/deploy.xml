@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<deploy
+    xmlns="http://www.apache.org/ode/schemas/dd/2007/03"
+    xmlns:tnsbpel="http://hw/Process/bpel"
+    xmlns:tnswsdl="http://hw/Process/wsdl"
+
+    xmlns:bookstore="http://bookstore.main/"
+	xmlns:order="http://order.main/"
+>
+
+    <process name="tnsbpel:CustomProcess">
+        <active>true</active>
+
+        <provide partnerLink="ProcessPartnerLink">
+            <service name="tnswsdl:CustomProcessService" port="ProcessPort" />
+        </provide>
+
+        <invoke partnerLink="SearchBookPartnerLink">
+            <service name="bookstore:BookStoreServiceImplService" port="BookStoreServiceImplPort" />
+        </invoke>
+
+        <provide partnerLink="SearchBookPartnerLink">
+            <service name="tnswsdl:CustomProcessService" port="SearchBookPort" />
+        </provide>
+
+        <invoke partnerLink="GetBookPricePartnerLink">
+            <service name="bookstore:BookStoreServiceImplService" port="BookStoreServiceImplPort" />
+        </invoke>
+
+        <provide partnerLink="GetBookPricePartnerLink">
+            <service name="tnswsdl:CustomProcessService" port="GetBookPricePort" />
+        </provide>
+
+        <invoke partnerLink="PlaceOrderPartnerLink">
+            <service name="order:OrderServiceImplService" port="OrderServiceImplPort" />
+        </invoke>
+
+        <provide partnerLink="PlaceOrderPartnerLink">
+            <service name="tnswsdl:CustomProcessService" port="PlaceOrderPort" />
+        </provide>
+
+        <invoke partnerLink="MakePaymentPartnerLink">
+            <service name="order:OrderServiceImplService" port="OrderServiceImplPort" />
+        </invoke>
+
+        <provide partnerLink="MakePaymentPartnerLink">
+            <service name="tnswsdl:CustomProcessService" port="MakePaymentPort" />
+        </provide>
+
+        <invoke partnerLink="SendConfirmationPartnerLink">
+            <service name="order:OrderServiceImplService" port="OrderServiceImplPort" />
+        </invoke>
+
+        <provide partnerLink="SendConfirmationPartnerLink">
+            <service name="tnswsdl:CustomProcessService" port="SendConfirmationPort" />
+        </provide>
+    </process>
+
+</deploy>

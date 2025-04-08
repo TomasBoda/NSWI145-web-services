@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions
+    xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+    xmlns:wsp="http://www.w3.org/ns/ws-policy"
+    xmlns:wsp1_2="http://schemas.xmlsoap.org/ws/2004/09/policy"
+    xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:tns="http://bookstore.main/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" 
+    xmlns="http://schemas.xmlsoap.org/wsdl/"
+    targetNamespace="http://bookstore.main/"
+    name="BookStoreServiceImplService"
+>
+    <types>
+        <xs:schema
+            xmlns:tns="http://bookstore.main/"
+            xmlns:xs="http://www.w3.org/2001/XMLSchema"
+            version="1.0"
+            targetNamespace="http://bookstore.main/"
+        >
+            <xs:element name="getBookPrice" type="tns:getBookPrice"/>
+            <xs:element name="getBookPriceResponse" type="tns:getBookPriceResponse"/>
+            <xs:element name="searchBook" type="tns:searchBook"/>
+            <xs:element name="searchBookResponse" type="tns:searchBookResponse"/>
+
+            <xs:complexType name="searchBook">
+                <xs:sequence>
+                    <xs:element name="arg0" type="xs:string" minOccurs="0"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="searchBookResponse">
+                <xs:sequence>
+                    <xs:element name="return" type="xs:string" minOccurs="0"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="getBookPrice">
+                <xs:sequence>
+                    <xs:element name="arg0" type="xs:string" minOccurs="0"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="getBookPriceResponse">
+                <xs:sequence>
+                    <xs:element name="return" type="xs:double" minOccurs="0"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+    </types>
+
+    <message name="searchBook">
+        <part name="parameters" element="tns:searchBook"></part>
+    </message>
+
+    <message name="searchBookResponse">
+        <part name="parameters" element="tns:searchBookResponse"></part>
+    </message>
+
+    <message name="getBookPrice">
+        <part name="parameters" element="tns:getBookPrice"></part>
+    </message>
+
+    <message name="getBookPriceResponse">
+        <part name="parameters" element="tns:getBookPriceResponse"></part>
+    </message>
+
+    <portType name="BookStoreServiceImpl">
+        <operation name="searchBook">
+            <input wsam:Action="http://bookstore.main/BookStoreServiceImpl/searchBookRequest" message="tns:searchBook"></input>
+            <output wsam:Action="http://bookstore.main/BookStoreServiceImpl/searchBookResponse" message="tns:searchBookResponse"></output>
+        </operation>
+
+        <operation name="getBookPrice">
+            <input wsam:Action="http://bookstore.main/BookStoreServiceImpl/getBookPriceRequest" message="tns:getBookPrice"></input>
+            <output wsam:Action="http://bookstore.main/BookStoreServiceImpl/getBookPriceResponse" message="tns:getBookPriceResponse"></output>
+        </operation>
+    </portType>
+
+    <binding name="BookStoreServiceImplPortBinding" type="tns:BookStoreServiceImpl">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"></soap:binding>
+
+        <operation name="searchBook">
+            <soap:operation soapAction=""></soap:operation>
+            <input>
+                <soap:body use="literal"></soap:body>
+            </input>
+            <output>
+                <soap:body use="literal"></soap:body>
+            </output>
+        </operation>
+
+        <operation name="getBookPrice">
+            <soap:operation soapAction=""></soap:operation>
+            <input>
+                <soap:body use="literal"></soap:body>
+            </input>
+            <output>
+                <soap:body use="literal"></soap:body>
+            </output>
+        </operation>
+    </binding>
+
+    <service name="BookStoreServiceImplService">
+        <port name="BookStoreServiceImplPort" binding="tns:BookStoreServiceImplPortBinding">
+            <soap:address location="http://127.0.0.1:8000/bookstore"></soap:address>
+        </port>
+    </service>
+</definitions>

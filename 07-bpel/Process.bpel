@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<process name="CustomProcess"
+    targetNamespace="http://hw/Process/bpel" 
+    xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+
+    xmlns:tns="http://hw/Process/bpel"
+    xmlns:tnswsdl="http://hw/Process/wsdl"
+    xmlns:tnsxsd="http://hw/Process/xsd"
+
+    xmlns:bookstore="http://bookstore.main/"
+	xmlns:order="http://order.main/"
+
+    queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0"
+    expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0"
+>
+
+    <import
+        location="Process.wsdl"
+        namespace="http://hw/Process/wsdl"
+        importType="http://schemas.xmlsoap.org/wsdl/"
+    />
+
+    <partnerLinks>
+        <partnerLink
+            name="ProcessPartnerLink" 
+            partnerLinkType="tnswsdl:ProcessLinkType" 
+            myRole="CustomProcessExecutorRole"
+        />
+
+        <partnerLink
+            name="SearchBookPartnerLink" 
+            partnerLinkType="tnswsdl:SearchBookLinkType" 
+            myRole="SearchBookClientRole"
+            partnerRole="SearchBookRole"
+        />
+
+        <partnerLink
+            name="GetBookPricePartnerLink" 
+            partnerLinkType="tnswsdl:GetBookPriceLinkType" 
+            myRole="GetBookPriceClientRole"
+            partnerRole="GetBookPriceRole"
+        />
+
+        <partnerLink
+            name="PlaceOrderPartnerLink" 
+            partnerLinkType="tnswsdl:PlaceOrderLinkType" 
+            myRole="PlaceOrderClientRole"
+            partnerRole="PlaceOrderRole"
+        />
+
+        <partnerLink
+            name="MakePaymentPartnerLink" 
+            partnerLinkType="tnswsdl:MakePaymentLinkType" 
+            myRole="MakePaymentClientRole"
+            partnerRole="MakePaymentRole"
+        />
+
+        <partnerLink
+            name="SendConfirmationPartnerLink" 
+            partnerLinkType="tnswsdl:SendConfirmationLinkType" 
+            myRole="SendConfirmationClientRole"
+            partnerRole="SendConfirmationRole"
+        />
+    </partnerLinks>
+
+    <variables>
+        <variable name="inputMessage" messageType="tnswsdl:ProcessInputMessage" />
+        <variable name="outputMessage" messageType="tnswsdl:ProcessOutputMessage" />
+
+        <variable name="searchBookRequest" messageType="bookstore:searchBook" />
+        <variable name="searchBookResponse" messageType="bookstore:searchBookResponse" />
+
+        <variable name="getBookPriceRequest" messageType="bookstore:getBookPrice" />
+        <variable name="getBookPriceResponse" messageType="bookstore:getBookPriceResponse" />
+
+        <variable name="placeOrderRequest" messageType="order:placeOrder" />
+        <variable name="placeOrderResponse" messageType="order:placeOrderResponse" />
+
+        <variable name="makePaymentRequest" messageType="order:makePayment" />
+        <variable name="makePaymentResponse" messageType="order:makePaymentResponse" />
+
+        <variable name="sendConfirmationRequest" messageType="order:sendConfirmation" />
+        <variable name="sendConfirmationResponse" messageType="order:sendConfirmationResponse" />
+    </variables>
+
+    <sequence>
+        <receive
+            name="ReceiveProcessInputs"
+            partnerLink="ProcessPartnerLink"
+            portType="tnswsdl:ProcessPortType"
+            operation="executeProcess"
+            variable="inputMessage"
+            createInstance="yes"
+        />
+
+        <!-- SEARCH BOOK -->
+
+        <assign name="AssignToSearchBookRequest">
+            <copy>
+                <from>
+                    <literal>
+                        <bookstore:searchBook>
+                            <arg0 xmlns=""></arg0>
+                        </bookstore:searchBook>
+                    </literal>
+                </from>
+                <to variable="searchBookRequest" part="parameters"/>
+            </copy>
+
+            <copy>
+                <from>$inputMessage.parameters/bookTitle</from>
+                <to>$searchBookRequest.parameters/arg0</to>
+            </copy>
+        </assign>
+
+        <invoke
+            name="InvokeSearchBook"
+            partnerLink="SearchBookPartnerLink"
+            portType="bookstore:BookStoreServiceImpl"
+            operation="searchBook"
+            inputVariable="searchBookRequest"
+            outputVariable="searchBookResponse"
+        />
+
+        <!-- GET BOOK PRICE -->
+
+        <assign name="AssignToGetBookPriceRequest">
+            <copy>
+                <from>
+                    <literal>
+                        <bookstore:getBookPrice>
+                            <arg0 xmlns=""></arg0>
+                        </bookstore:getBookPrice>
+                    </literal>
+                </from>
+                <to variable="getBookPriceRequest" part="parameters"/>
+            </copy>
+
+            <copy>
+                <from>$searchBookResponse.parameters/return</from>
+                <to>$getBookPriceRequest.parameters/arg0</to>
+            </copy>
+        </assign>
+
+        <invoke
+            name="InvokeGetBookPrice"
+            partnerLink="GetBookPricePartnerLink"
+            portType="bookstore:BookStoreServiceImpl"
+            operation="getBookPrice"
+            inputVariable="getBookPriceRequest"
+            outputVariable="getBookPriceResponse"
+        />
+
+        <!-- PLACE ORDER -->
+
+        <assign name="AssignToPlaceOrderRequest">
+            <copy>
+                <from>
+                    <literal>
+                        <order:placeOrder>
+                            <arg0 xmlns=""></arg0>
+                            <arg1 xmlns="">customer001</arg1>
+                        </order:placeOrder>
+                    </literal>
+                </from>
+                <to variable="placeOrderRequest" part="parameters"/>
+            </copy>
+
+            <copy>
+                <from>$getBookPriceResponse.parameters/return</from>
+                <to>$placeOrderRequest.parameters/arg0</to>
+            </copy>
+        </assign>
+
+        <invoke
+            name="InvokePlaceOrder"
+            partnerLink="PlaceOrderPartnerLink"
+            portType="order:OrderServiceImpl"
+            operation="placeOrder"
+            inputVariable="placeOrderRequest"
+            outputVariable="placeOrderResponse"
+        />
+
+        <!-- SEND CONFIRMATION & MAKE PAYMENT -->
+
+        <flow>
+            <!-- SEND CONFIRMATION -->
+            <sequence>
+                <assign name="AssignToSendConfirmationRequest">
+                    <copy>
+                        <from>
+                            <literal>
+                                <order:sendConfirmation>
+                                    <arg0 xmlns=""></arg0>
+                                </order:sendConfirmation>
+                            </literal>
+                        </from>
+                        <to variable="sendConfirmationRequest" part="parameters"/>
+                    </copy>
+
+                    <copy>
+                        <from>$placeOrderResponse.parameters/return</from>
+                        <to>$sendConfirmationRequest.parameters/arg0</to>
+                    </copy>
+                </assign>
+
+                <invoke
+                    name="InvokeSendConfirmation"
+                    partnerLink="SendConfirmationPartnerLink"
+                    portType="order:OrderServiceImpl"
+                    operation="sendConfirmation"
+                    inputVariable="sendConfirmationRequest"
+                    outputVariable="sendConfirmationResponse"
+                />
+            </sequence>
+
+            <!-- MAKE PAYMENT -->
+            <sequence>
+                <assign name="AssignToMakePaymentRequest">
+                    <copy>
+                        <from>
+                            <literal>
+                                <order:makePayment>
+                                    <arg0 xmlns=""></arg0>
+                                    <arg1 xmlns=""></arg1>
+                                </order:makePayment>
+                            </literal>
+                        </from>
+                        <to variable="makePaymentRequest" part="parameters"/>
+                    </copy>
+
+                    <copy>
+                        <from>$placeOrderResponse.parameters/return</from>
+                        <to>$makePaymentRequest.parameters/arg0</to>
+                    </copy>
+
+                    <copy>
+                        <from>$getBookPriceResponse.parameters/return</from>
+                        <to>$makePaymentRequest.parameters/arg1</to>
+                    </copy>
+                </assign>
+
+                <invoke
+                    name="InvokeMakePayment"
+                    partnerLink="MakePaymentPartnerLink"
+                    portType="order:OrderServiceImpl"
+                    operation="makePayment"
+                    inputVariable="makePaymentRequest"
+                    outputVariable="makePaymentResponse"
+                />
+            </sequence>
+        </flow>
+
+        <if>
+            <condition>$sendConfirmationResponse.parameters/return = 'Book ordered successfully' and $makePaymentResponse.parameters/return = 'success'</condition>
+            <!-- SUCCESS -->
+            <assign name="AssignResultToOutput">
+                <copy>
+                    <from>concat('Book "', $inputMessage.parameters/bookTitle, '" (', $getBookPriceResponse.parameters/return , ' eur) ordered and paid for successfully')</from>
+                    <to variable="outputMessage" part="parameters"/>
+                </copy>
+            </assign>
+            <!-- ERROR -->
+            <else>
+                <assign name="AssignResultToOutput">
+                    <copy>
+                        <from>'Error ordering and paying for the book'</from>
+                        <to variable="outputMessage" part="parameters"/>
+                    </copy>
+                </assign>
+            </else>
+        </if>
+
+        <!-- REPLY -->
+
+        <reply
+            name="ReplyProcessOutputs"
+            partnerLink="ProcessPartnerLink"
+            portType="tnswsdl:ProcessPortType"
+            operation="executeProcess"
+            variable="outputMessage"
+        />
+    </sequence>
+</process>
