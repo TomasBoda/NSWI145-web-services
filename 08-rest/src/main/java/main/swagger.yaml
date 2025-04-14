@@ -1,0 +1,177 @@
+openapi: 3.0.0
+info:
+  title: Books API
+  description: This API allows you to manage books.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/08-rest/api
+    description: API Server
+paths:
+  /books:
+    get:
+      summary: Get all books
+      operationId: getBooks
+      tags:
+        - Books
+      responses:
+        '200':
+          description: A list of books
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/books'
+    post:
+      summary: Create a new book
+      operationId: createBook
+      tags:
+        - Books
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/book'
+      responses:
+        '200':
+          description: Book created successfully
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Book created successfully."
+        '409':
+          description: Book ID already exists
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Book with ID id001 already exists."
+  /books/{bookId}:
+    get:
+      summary: Get a specific book
+      operationId: getBook
+      tags:
+        - Books
+      parameters:
+        - name: bookId
+          in: path
+          required: true
+          description: The ID of the book to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A single book
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/book'
+        '404':
+          description: Book not found
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Book with ID id001 not found."
+    put:
+      summary: Update a book
+      operationId: putBook
+      tags:
+        - Books
+      parameters:
+        - name: bookId
+          in: path
+          required: true
+          description: The ID of the book to update
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/book'
+      responses:
+        '200':
+          description: Book updated successfully
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Book updated successfully."
+        '404':
+          description: Book not found
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Book with ID id001 not found."
+        '409':
+          description: Book IDs from URL and request body do not match
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Book IDs from URL and request body do not match."
+    delete:
+      summary: Delete a book
+      operationId: deleteBook
+      tags:
+        - Books
+      parameters:
+        - name: bookId
+          in: path
+          required: true
+          description: The ID of the book to delete
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Book deleted successfully
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Book with ID id001 deleted successfully."
+        '404':
+          description: Book not found
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Book with ID id001 not found."
+components:
+  schemas:
+    books:
+      type: array
+      xml:
+        name: books
+        wrapped: true
+      items:
+        $ref: '#/components/schemas/book'
+    book:
+      type: object
+      xml:
+        name: book
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the book
+          example: "id001"
+        title:
+          type: string
+          description: The title of the book
+          example: "Harry Potter"
+        author:
+          type: string
+          description: The author of the book
+          example: "J. K. Rowling"
+        published:
+          type: string
+          description: The publication year of the book
+          example: "2000"
+      required:
+        - id
+        - title
+        - author
+        - published
