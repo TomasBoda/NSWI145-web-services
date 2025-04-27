@@ -11,16 +11,15 @@ public class Main {
 	private String baseUrl = "http://127.0.0.1:8000";
 	
 	public Main() {
-		//AuthServiceImpl authService = new AuthServiceImpl();
-		//BankServiceImpl bankService = new BankServiceImpl(authService);
-		//this.publish("AuthService", "/auth", authService);
-		//this.publish("BankService", "/bank", bankService);
+		AuthServiceImpl authService = new AuthServiceImpl();
+		BankServiceImpl bankService = new BankServiceImpl(authService);
+		this.publish("AuthService", "/auth", authService);
+		this.publish("BankService", "/bank", bankService);
 		
-		BookStoreServiceImpl bookStoreService = new BookStoreServiceImpl();
-		OrderServiceImpl orderService = new OrderServiceImpl();
-	
-		this.publish("BookStoreService", "/bookstore", bookStoreService);
-		this.publish("OrderService", "/order", orderService);
+		//BookStoreServiceImpl bookStoreService = new BookStoreServiceImpl();
+		//OrderServiceImpl orderService = new OrderServiceImpl();
+		//this.publish("BookStoreService", "/bookstore", bookStoreService);
+		//this.publish("OrderService", "/order", orderService);
 	}
 	
 	private void publish(String name, String url, Object implementator) {

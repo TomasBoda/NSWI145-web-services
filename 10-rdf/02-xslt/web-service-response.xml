@@ -1,0 +1,11 @@
+<S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/">
+   <S:Body>
+      <ns2:sendMoneyResponse xmlns:ns2="http://bank.main/">
+         <return>
+            <data xsi:type="xs:double" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema">2000.45</data>
+            <message>Money sent successfully</message>
+            <status>200</status>
+         </return>
+      </ns2:sendMoneyResponse>
+   </S:Body>
+</S:Envelope>

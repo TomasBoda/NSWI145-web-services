@@ -1,0 +1,31 @@
+{
+    "@context": {
+        "@base": "http://example.org/transaction/",
+        "ex": "http://example.org/vocab#",
+        "xsd": "http://www.w3.org/2001/XMLSchema#",
+        "transaction": "@graph",
+        "type": "@type",
+        "TransactionResult": "ex:TransactionResult",
+        "data": {
+            "@id": "ex:data",
+            "@type": "xsd:double"
+        },
+        "message": {
+            "@id": "ex:message",
+            "@language": "en"
+        },
+        "status": {
+            "@id": "ex:status",
+            "@type": "xsd:integer"
+        }
+    },
+    "transaction": [
+        {
+            "type": "TransactionResult",
+            "@id": "001",
+            "data": "2000.45",
+            "message": "Money sent successfully",
+            "status": "200"
+        }
+    ]
+}

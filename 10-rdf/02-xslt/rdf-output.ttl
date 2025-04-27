@@ -1,0 +1,8 @@
+
+@prefix ex: <http://example.org/vocab#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://example.org/transaction/001> a ex:TransactionResult ;
+    ex:data     "2000.45"^^xsd:double ;
+    ex:message  "Money sent successfully"@en ;
+    ex:status   "200"^^xsd:integer .

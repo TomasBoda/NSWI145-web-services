@@ -1,0 +1,88 @@
+@prefix ex: <http://example.org/vocab#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# classes
+
+ex:BankAccount a rdfs:Class ;
+    rdfs:label "Bank Account" ;
+    rdfs:comment "Represents a user's bank account with a balance." .
+
+ex:Transaction a rdfs:Class ;
+    rdfs:label "Transaction" ;
+    rdfs:comment "Represents a money transfer between two bank accounts." .
+
+ex:AuthSession a rdfs:Class ;
+    rdfs:label "Authentication Session" ;
+    rdfs:comment "Represents a session in which a user is authenticated." .
+
+ex:User a rdfs:Class ;
+    rdfs:label "User" ;
+    rdfs:comment "Represents a user who owns bank accounts and performs transactions." .
+
+ex:Entity a rdfs:Class ;
+    rdfs:label "Entity" ;
+    rdfs:comment "A generic entity base class with identifier and creation date." .
+
+# properties
+
+ex:balance a rdf:Property ;
+    rdfs:domain ex:BankAccount ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "Balance" ;
+    rdfs:comment "The current balance of the bank account." .
+
+ex:hasSenderAccount a rdf:Property ;
+    rdfs:domain ex:Transaction ;
+    rdfs:range ex:BankAccount ;
+    rdfs:label "Has Sender Account" ;
+    rdfs:comment "The bank account sending money in the transaction." .
+
+ex:hasRecipientAccount a rdf:Property ;
+    rdfs:domain ex:Transaction ;
+    rdfs:range ex:BankAccount ;
+    rdfs:label "Has Recipient Account" ;
+    rdfs:comment "The bank account receiving money in the transaction." .
+
+ex:hasSession a rdf:Property ;
+    rdfs:domain ex:User ;
+    rdfs:range ex:AuthSession ;
+    rdfs:label "Has Session" ;
+    rdfs:comment "Relationship linking a user to an authentication session." .
+
+ex:username a rdf:Property ;
+    rdfs:domain ex:User ;
+    rdfs:range xsd:string ;
+    rdfs:label "Username" ;
+    rdfs:comment "The username used for logging in." .
+
+ex:password a rdf:Property ;
+    rdfs:domain ex:User ;
+    rdfs:range xsd:string ;
+    rdfs:label "Password" ;
+    rdfs:comment "The password associated with the username." .
+
+# something new
+
+ex:BankAccountStatus a rdfs:Class ;
+    rdfs:label "Bank Account Status" ;
+    rdfs:comment "Represents the current status of a bank account." .
+
+ex:currentStatus a rdf:Property ;
+    rdfs:domain ex:BankAccountStatus ;
+    rdfs:range xsd:integer ;
+    rdfs:label "Current Bank Account Status" ;
+    rdfs:comment "Current bank account status, e.g., active, frozen, ..." .
+
+ex:statusChangedAt a rdf:Property ;
+    rdfs:domain ex:BankAccountStatus ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "Status Change Timestamp" ;
+    rdfs:comment "Timestamp of the last change of the account status" .
+
+ex:hasAccountStatus a rdf:Property ;
+    rdfs:domain ex:BankAccount ;
+    rdfs:range ex:BankAccountStatus ;
+    rdfs:label "Account Status" ;
+    rdfs:comment "Links a bank account to its current status" .
